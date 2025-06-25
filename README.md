@@ -1,0 +1,1 @@
+Welcome to the rename_cover_letters NLP script!
