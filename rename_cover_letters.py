@@ -43,4 +43,9 @@ class PDFHandler(FileSystemEventHandler):
             text = read_pdf(event.src_path)
             company, role = extract_company_and_role(text)
 
+            new_name = f"{company} - {role}.pdf"
+            sanitized_new_name = re.sub(r'[^a-zA-Z0-9 _.-]', '-', new_name).strip(" .")
             
+            if len(sanitized_new_name) > 255:
+                sanitized_new_name = sanitized_new_name[:250] + ".pdf"
+
