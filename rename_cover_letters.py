@@ -4,6 +4,7 @@ from pathlib import Path
 from PyPDF2 import PdfReader
 from watchdog.events import FileSystemEventHandler
 import time
+import os
 
 nlp = spacy.load("en_core_web_sm")
 
@@ -45,7 +46,9 @@ class PDFHandler(FileSystemEventHandler):
 
             new_name = f"{company} - {role}.pdf"
             sanitized_new_name = re.sub(r'[^a-zA-Z0-9 _.-]', '-', new_name).strip(" .")
-            
+
             if len(sanitized_new_name) > 255:
-                sanitized_new_name = sanitized_new_name[:250] + ".pdf"
+                base, ext = os.path.splitext(sanitized_new_name)
+                sanitized_new_name = base[:255 - len(ext)] + ext
+
 
