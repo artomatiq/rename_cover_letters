@@ -51,4 +51,14 @@ class PDFHandler(FileSystemEventHandler):
                 base, ext = os.path.splitext(sanitized_new_name)
                 sanitized_new_name = base[:255 - len(ext)] + ext
 
+            new_path = os.path.join(DOWNLOADS_FOLDER, new_name)
+            
+            try:
+                os.rename(event.src_path, new_path)
+                print(f"Renamed to: {new_path}")
+            except Exception as e:
+                print(f"Rename failed: {e}")
+                
+            
+            
 
