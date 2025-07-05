@@ -20,3 +20,13 @@ def extract_company_and_role(text):
         role = role_match.group(1).strip()
 
     return company or "Unknown Company", role or "Unknown Role"
+
+def read_pdf(path):
+    try:
+        with open(path, 'rb') as file:
+            reader = PdfReader(file)
+            return "\n".join(page.extract_text() or "" for page in reader.pages)
+    except Exception as e:
+        print(f"Failed to read PDF: {e}")
+        return ""
+    
