@@ -5,6 +5,7 @@ from PyPDF2 import PdfReader
 from watchdog.events import FileSystemEventHandler
 import time
 import os
+from watchdog.observers import Observer
 
 nlp = spacy.load("en_core_web_sm")
 
@@ -60,5 +61,17 @@ class PDFHandler(FileSystemEventHandler):
                 print(f"Rename failed: {e}")
                 
             
-            
+if __name__ == "__main__":
+    observer = Observer()
+    event_handler = PDFHandler()
+    observer.schedule(event_handler, DOWNLOADS_FOLDER, recursive=False)
+    observer.start()
+    print(f"Watching folder: {DOWNLOADS_FOLDER}")
+    
+    try:
+        while True:
+            time.sleep(5)
+    except KeyboardInterrupt:
+        observer.stop()
+    observer.join()
 
