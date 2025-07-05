@@ -2,6 +2,8 @@ import spacy
 import re
 from pathlib import Path
 from PyPDF2 import PdfReader
+from watchdog.events import FileSystemEventHandler
+import time
 
 nlp = spacy.load("en_core_web_sm")
 
@@ -30,3 +32,15 @@ def read_pdf(path):
         print(f"Failed to read PDF: {e}")
         return ""
     
+
+
+
+class PDFHandler(FileSystemEventHandler):
+    def on_created(self, event):
+        if event.src_path.endswith((".pdf", ".docx", ".doc")):
+            time.sleep(1)
+            print(f"New .pdf or .doc(x) detected: {event.src_path}")
+            text = read_pdf(event.src_path)
+            company, role = extract_company_and_role(text)
+
+            
